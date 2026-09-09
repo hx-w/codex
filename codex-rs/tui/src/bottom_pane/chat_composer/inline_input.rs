@@ -143,7 +143,7 @@ impl ChatComposer {
             area,
             buf,
             &mut state,
-            Style::default(),
+            self.input_text_style(),
             &highlights,
         );
         if self.draft.textarea.is_empty() {

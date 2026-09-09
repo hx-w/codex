@@ -19,3 +19,13 @@
 - Avoid ANSI `blue` and `yellow` because for now the style guide doesn't use them. Prefer a foreground color mentioned above.
 
 (There are some rules to try to catch this in `clippy.toml`.)
+
+# Explicit composer text overrides
+
+Custom `.tmTheme` files may style `codex.composer.input` with `foreground` and
+`fontStyle` (`bold`, `italic`, `underline`). Only matching scope settings apply;
+the theme's global foreground and background do not become composer defaults.
+Apply this base style to editable glyphs before element and search highlights.
+Keep unoccupied cells, placeholders, masked input, prompts, and footers unchanged.
+Embedded `ComposerInput` owners can override the base style with `set_text_style`
+and return to the active theme with `reset_text_style`; owners request redraws.

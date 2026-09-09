@@ -1,0 +1,58 @@
+---
+source: tui/src/public_widgets/composer_input_tests.rs
+assertion_line: 25
+expression: "snapshots.join(\"\\n\\n\")"
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 30, height: 6 },
+    content: [
+        "                              ",
+        "› 你好 👩‍💻                     ", // hidden by multi-width symbols: [(3, " "), (5, " "), (8, " ")]
+        "  second line                 ",
+        "                              ",
+        "                              ",
+        "           100% context left  ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 1, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 2, y: 1, fg: Green, bg: Reset, underline: Reset, modifier: ITALIC | UNDERLINED,
+        x: 3, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 4, y: 1, fg: Green, bg: Reset, underline: Reset, modifier: ITALIC | UNDERLINED,
+        x: 5, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 6, y: 1, fg: Green, bg: Reset, underline: Reset, modifier: ITALIC | UNDERLINED,
+        x: 8, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 2, y: 2, fg: Green, bg: Reset, underline: Reset, modifier: ITALIC | UNDERLINED,
+        x: 13, y: 2, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 11, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+        x: 28, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
+
+Buffer {
+    area: Rect { x: 0, y: 0, width: 30, height: 6 },
+    content: [
+        "                              ",
+        "› 你好 👩‍💻                     ", // hidden by multi-width symbols: [(3, " "), (5, " "), (8, " ")]
+        "  second line                 ",
+        "                              ",
+        "                              ",
+        "           100% context left  ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 1, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 2, y: 1, fg: Magenta, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 3, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 4, y: 1, fg: Magenta, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 5, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 6, y: 1, fg: Magenta, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 8, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 2, y: 2, fg: Magenta, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 13, y: 2, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 11, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+        x: 28, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

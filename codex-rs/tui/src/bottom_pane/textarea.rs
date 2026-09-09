@@ -2132,7 +2132,8 @@ impl TextArea {
         self.render_lines_masked(area, buf, &lines, start..end, mask_char);
     }
 
-    /// Render the textarea with `base_style` plus additional render-only highlight ranges.
+    /// Render text glyphs with `base_style` plus additional render-only highlight ranges.
+    /// Unused cells retain the surrounding widget's style.
     ///
     /// Highlight ranges are byte ranges in `self.text`. They affect only the buffer rendering and
     /// do not mutate the editable text, cursor, element metadata, or wrapping cache.
@@ -2169,7 +2170,6 @@ impl TextArea {
             let y = area.y + row as u16;
             let visible = wrapping::visible_prefix(&self.text[r.start..r.end - 1], area.width);
             let line_range = r.start..r.start + visible.len();
-            buf.set_style(Rect::new(area.x, y, area.width, 1), base_style);
             // Draw base line with the provided style.
             buf.set_stringn(
                 area.x,
@@ -4029,38 +4029,33 @@ mod tests {
 
     #[test]
     fn render_highlights_apply_style_without_mutating_text() {
-        let t = ta_with("hello world");
+        use ratatui::style::Stylize;
+        use ratatui::text::Line;
+
+        let mut t = ta_with("hello world");
+        t.add_element_range(6..11);
         let area = Rect::new(0, 0, 20, 1);
         let mut state = TextAreaState::default();
         let mut buf = Buffer::empty(area);
+        let base_style = Style::default().fg(Color::Green).italic();
         let highlight_style = Style::default().add_modifier(ratatui::style::Modifier::REVERSED);
 
         t.render_ref_styled_with_highlights(
             area,
             &mut buf,
             &mut state,
-            Style::default(),
+            base_style,
             &[(6..11, highlight_style)],
         );
 
         assert_eq!(t.text(), "hello world");
-        assert!(
-            !buf[(0, 0)]
-                .style()
-                .add_modifier
-                .contains(ratatui::style::Modifier::REVERSED)
-        );
-        assert!(
-            buf[(6, 0)]
-                .style()
-                .add_modifier
-                .contains(ratatui::style::Modifier::REVERSED)
-        );
-        assert!(
-            buf[(10, 0)]
-                .style()
-                .add_modifier
-                .contains(ratatui::style::Modifier::REVERSED)
+        assert_eq!(
+            buf,
+            Buffer::with_lines([Line::from(vec![
+                "hello ".green().italic(),
+                "world".cyan().italic().reversed(),
+                "         ".into(),
+            ])])
         );
     }
 
