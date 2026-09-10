@@ -7,6 +7,7 @@
 use crossterm::event::KeyEvent;
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
+use ratatui::style::Style;
 use std::time::Duration;
 
 use crate::app_event::AppEvent;
@@ -33,6 +34,18 @@ pub struct ComposerInput {
 }
 
 impl ComposerInput {
+    /// Override the editable text's base style. Semantic highlights render above it;
+    /// placeholders, masked input, prompts, and footers keep their existing styles.
+    /// The owner should request a redraw after changing this render-only preference.
+    pub fn set_text_style(&mut self, style: Style) {
+        self.inner.text_style = Some(style);
+    }
+
+    /// Follow the active theme's `codex.composer.input` scope again.
+    pub fn reset_text_style(&mut self) {
+        self.inner.text_style = None;
+    }
+
     /// Create a new composer input with a neutral placeholder.
     pub fn new() -> Self {
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
@@ -147,3 +160,7 @@ impl Default for ComposerInput {
         Self::new()
     }
 }
+
+#[cfg(test)]
+#[path = "composer_input_tests.rs"]
+mod tests;

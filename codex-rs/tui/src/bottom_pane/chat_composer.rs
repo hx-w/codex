@@ -230,7 +230,6 @@ use ratatui::text::Line;
 use ratatui::text::Span;
 use ratatui::widgets::Block;
 use ratatui::widgets::Paragraph;
-use ratatui::widgets::StatefulWidgetRef;
 use ratatui::widgets::Widget;
 use ratatui::widgets::WidgetRef;
 
@@ -315,6 +314,7 @@ mod popup_state;
 mod reconnect;
 mod slash_input;
 mod sparkle;
+mod text_style;
 mod vim_history;
 mod vim_search;
 
@@ -518,6 +518,8 @@ impl ChatComposerConfig {
 }
 
 pub(crate) struct ChatComposer {
+    /// Explicit embedding override; otherwise resolve the active composer theme scope.
+    pub(crate) text_style: Option<Style>,
     draft: DraftState,
     popups: PopupState,
     app_event_tx: AppEventSender,
@@ -651,6 +653,7 @@ impl ChatComposer {
         let default_vim_normal_keymap = default_keymap.vim_normal.clone();
 
         let mut this = Self {
+            text_style: None,
             draft: DraftState::new(),
             popups: PopupState::default(),
             app_event_tx,
@@ -4999,22 +5002,13 @@ impl ChatComposer {
                         .chain(self.draft.textarea.vim_search_highlights())
                         .map(|range| (range, search_highlight_style)),
                 );
-                if highlights.is_empty() {
-                    StatefulWidgetRef::render_ref(
-                        &(&self.draft.textarea),
-                        textarea_rect,
-                        buf,
-                        &mut state,
-                    );
-                } else {
-                    self.draft.textarea.render_ref_styled_with_highlights(
-                        textarea_rect,
-                        buf,
-                        &mut state,
-                        Style::default(),
-                        &highlights,
-                    );
-                }
+                self.draft.textarea.render_ref_styled_with_highlights(
+                    textarea_rect,
+                    buf,
+                    &mut state,
+                    self.input_text_style(),
+                    &highlights,
+                );
             }
         }
         if !self.draft.input_enabled || textarea_is_empty {

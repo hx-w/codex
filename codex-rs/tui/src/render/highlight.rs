@@ -50,6 +50,11 @@ use two_face::theme::EmbeddedThemeName;
 #[path = "highlight_streaming.rs"]
 mod streaming;
 
+#[path = "highlight_composer.rs"]
+mod composer;
+
+pub(crate) use composer::composer_input_style;
+
 pub(crate) use streaming::StreamingCodeHighlighter;
 
 // -- Global singletons -------------------------------------------------------
